@@ -8,10 +8,11 @@
 
 #include "partition.hpp"
 #include <assert.h>
+#include <thread>
 
 descriptor::descriptor(int const &max_elem)
 {
-    this->pos = new int[max_elem + 1];
+    this->pos = new long[max_elem + 1];
     this->freqs = new int[max_elem + 1];
     this->max_index = max_elem + 1;
     
@@ -31,10 +32,10 @@ descriptor::~descriptor()
 }
 
 void descriptor::process_partition(int const *arr,
-                                   int const &from,
-                                   int const &to)
+                                   long const &from,
+                                   long const &to)
 {
-    for (int i = from ; i < to ; ++i)
+    for (long i = from ; i < to ; ++i)
     {
         assert (arr[i] < this->max_index);
         if (this->pos[arr[i]] != -1)

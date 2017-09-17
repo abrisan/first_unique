@@ -14,20 +14,20 @@
 class descriptor
 {
 private:
-    int *pos;
+    long *pos;
     int *freqs;
     int max_index;
 public:
     descriptor(int const & max_elem);
     ~descriptor();
     void process_partition(int const *arr,
-                           int const &from,
-                           int const &to);
+                           long const &from,
+                           long const &to);
     void merge_partition(descriptor const &other);
     
     
     int const &get_max() const {return this->max_index;}
-    int const *get_pos() const {return this->pos;}
+    long const *get_pos() const {return this->pos;}
     int const *get_freqs() const {return this->freqs;}
 };
 
@@ -38,7 +38,7 @@ inline std::ostream &operator<<(std::ostream &cout,
     int i = 0;
     
     int max = my_obj.get_max();
-    int const *pos = my_obj.get_pos();
+    long const *pos = my_obj.get_pos();
     int const *freqs = my_obj.get_freqs();
     
     for(;;++i)
@@ -58,13 +58,13 @@ inline std::ostream &operator<<(std::ostream &cout,
 }
 
 
-inline int get_result_for_descriptor(descriptor const &des)
+inline long get_result_for_descriptor(descriptor const &des)
 {
-    int const *pos = des.get_pos();
+    long const *pos = des.get_pos();
     int const *freqs = des.get_freqs();
     int const max_index = des.get_max();
     
-    int result = std::numeric_limits<int>::max();
+    long result = std::numeric_limits<long>::max();
     
     for (int i = 0 ; i < max_index ; ++i)
     {
