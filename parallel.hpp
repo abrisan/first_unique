@@ -31,13 +31,11 @@ inline void execute_function(descriptor *des,
                       long const from,
                       long const to)
 {
-    populate_array(arr, from, to);
     des->process_partition(arr, from, to);
 }
 
-inline long get_result_parallel()
+inline long get_result_parallel(int *array)
 {
-    int *array = new int[TEST_SIZE];
     long const part_size = TEST_SIZE / N_THREADS;
     
     descriptor **des = new descriptor*[N_THREADS];
@@ -64,25 +62,16 @@ inline long get_result_parallel()
     
     long result = get_result_for_descriptor(*des[0]);
     
-    delete[] array;
     delete[] des;
     
     return result;
 }
 
-inline long get_result_serial()
+inline long get_result_serial(int *arr)
 {
-    int *arr = new int[TEST_SIZE];
     descriptor d(256);
     
-    for (long i = 0 ; i < TEST_SIZE; ++i)
-    {
-        arr[i] = std::rand() % 256;
-    }
-    
     d.process_partition(arr, 0, TEST_SIZE);
-    
-    delete[] arr;
     
     return get_result_for_descriptor(d);
 }
