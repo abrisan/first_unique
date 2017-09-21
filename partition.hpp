@@ -17,6 +17,7 @@ private:
     long *pos;
     int *freqs;
     int max_index;
+    bool done = false;
 public:
     descriptor(int const & max_elem);
     ~descriptor();
@@ -29,6 +30,7 @@ public:
     int const &get_max() const {return this->max_index;}
     long const *get_pos() const {return this->pos;}
     int const *get_freqs() const {return this->freqs;}
+    bool const finished() const {return this->done;}
 };
 
 inline std::ostream &operator<<(std::ostream &cout,

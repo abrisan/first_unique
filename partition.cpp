@@ -48,6 +48,7 @@ void descriptor::process_partition(int const *arr,
             this->freqs[arr[i]] = 1;
         }
     }
+    this->done = true;
 }
 
 void descriptor::merge_partition(descriptor const &other)

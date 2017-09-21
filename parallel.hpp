@@ -13,8 +13,8 @@
 #include <vector>
 #include "partition.hpp"
 
-#define TEST_SIZE (1L << 31)
-#define N_THREADS 4
+#define TEST_SIZE (1L << 30)
+#define N_THREADS 8
 
 inline void populate_array(int *arr,
                     long const from,
@@ -34,6 +34,18 @@ inline void execute_function(descriptor *des,
     des->process_partition(arr, from, to);
 }
 
+inline bool finished(descriptor **des)
+{
+    bool ret = true;
+    
+    for (int i = 0 ; i < N_THREADS ; ++i)
+    {
+        ret &= des[i]->finished();
+    }
+    
+    return ret;
+}
+
 inline long get_result_parallel(int *array)
 {
     long const part_size = TEST_SIZE / N_THREADS;
@@ -45,6 +57,7 @@ inline long get_result_parallel(int *array)
         des[i] = new descriptor(256);
     }
     
+    
     for (long i = 0 ; i < N_THREADS; ++i)
     {
         long const start = i * part_size;
@@ -52,17 +65,18 @@ inline long get_result_parallel(int *array)
         long const end = end_start > TEST_SIZE ? TEST_SIZE : end_start;
         
         std::thread t(execute_function, des[i], array, start, end);
-        if (t.joinable()) t.join();
+        
+        t.detach();
     }
+    
+    while(!finished(des)) {}
     
     for (int i = 1 ; i < N_THREADS ; ++i)
     {
-        des[0]->merge_partition(*des[i]);
+        des[i]->merge_partition(*des[i]);
     }
     
     long result = get_result_for_descriptor(*des[0]);
-    
-    delete[] des;
     
     return result;
 }
